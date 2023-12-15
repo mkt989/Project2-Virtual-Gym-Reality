@@ -5,4 +5,7 @@
     <string name="mainRepsHint">Enter Reps</string>
     <string name="mainSubmitButton">Submit</string>
     <string name="noLogsMessage">No records, time to go to the gym</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.gymlogfa23.GymLog;
+import com.example.gymlogfa23.User;
 
 import java.util.List;
 
@@ -23,9 +24,30 @@ public interface GymLogDAO {
     void delete(GymLog gymLog);
 
     @Query("SELECT * FROM " + AppDatabase.GYMLOG_TABLE + " ORDER BY mDate DESC")
-    List<GymLog> getGymLogs();          //this is the return value
+    List<GymLog> getAllGymLogs();          //this is the return value
 
     @Query("SELECT * FROM " + AppDatabase.GYMLOG_TABLE + " WHERE mLogId = :logId")
-    GymLog getGymLogsById(int logId);
+    List<GymLog> getGymLogsById(int logId);
+
+    @Query("SELECT * FROM " + AppDatabase.GYMLOG_TABLE + " WHERE mUserId = :userId ORDER BY mDate DESC")
+    List<GymLog> getGymLogsByUserId(int userId);
+
+    @Insert
+    void insert(User... users);
+
+    @Update
+    void update(User... users);
+
+    @Delete
+    void delete(User user);
+
+    @Query("SELECT * FROM " + AppDatabase.USER_TABLE)
+    List<User> getAllUsers();
+
+    @Query("SELECT * FROM " + AppDatabase.USER_TABLE + " WHERE mUsername =:username")
+    User getUserByUsername(String username);
+
+    @Query("SELECT * FROM " + AppDatabase.USER_TABLE + " WHERE mUserId =:userId")
+    User getUserByUserId(int userId);
 
 }
