@@ -1,8 +1,11 @@
 package com.example.gymlogfa23;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
+
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.Context;
 import android.content.Intent;
@@ -126,6 +129,26 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void logoutUser() {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+
+        alertBuilder.setMessage(R.string.logout);
+
+        alertBuilder.setPositiveButton(getString(R.string.yes),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        clearUserFromPref();
+                    }
+                });
+        alertBuilder.setNegativeButton(getString(R.string.no),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //we don't really need to do anything here.
+                    }
+                });
+    }
 
     private GymLog getValuesFromDisplay() {
         String exercise = "No record found";
