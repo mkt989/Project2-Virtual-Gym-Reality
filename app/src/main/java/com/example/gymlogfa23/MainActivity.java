@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     private List<GymLog> mGymLogs;
     private int mUserId = -1;
+    private SharedPreferences mPreferences = null;
+    private User mUser;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         getDatabase();
 
         checkForUser();
+        addUserToPreference(mUserId);
+        loginUser(mUserId);
 
         mMainDisplay = findViewById(R.id.mainGymLogDisplay);
         mMainDisplay.setMovementMethod(new ScrollingMovementMethod());
@@ -89,11 +93,35 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 GymLog log = getValuesFromDisplay();
 
+                //log.setUserId(mUser.getUserId());
+
                 mGymLogDAO.insert(log);
 
                 refreshDisplay();
             }
         });
+    }
+
+    private void loginUser(int userId) {
+        mUser = mGymLogDAO.getUserByUserId(userId);
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(mUser != null) {
+            //MenuItem item = menu.findItem(R.id.userMenuLogout);
+            //item.setTitle(mUser.getUserName());
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void addUserToPreference(int userId) {
+        if(mPreferences == null) {
+            getPrefs();
+        }
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putInt(USER_ID_KEY, userId);
     }
 
     private void getDatabase() {
@@ -110,9 +138,12 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        SharedPreferences preferences = this.getSharedPreferences(PREFENCES_KEY, Context.MODE_PRIVATE);
 
-        mUserId = preferences.getInt(USER_ID_KEY, -1);
+        if(mPreferences == null) {
+            getPrefs();
+        }
+
+        mUserId = mPreferences.getInt(USER_ID_KEY, -1);
 
         if(mUserId != -1) {
             return;
@@ -121,12 +152,17 @@ public class MainActivity extends AppCompatActivity {
         //do we have any users at all?
         List<User> users = mGymLogDAO.getAllUsers();
         if(users.size() <= 0) {
-            User defaultUser = new User("Deb", "Deb");
-            mGymLogDAO.insert(defaultUser);
+            User defaultUser = new User("Deb", "123");
+            User altUser = new User("Shaw", "123");
+            mGymLogDAO.insert(defaultUser, altUser);
         }
 
         Intent intent = LoginActivity.intentFactory(this);
         startActivity(intent);
+    }
+
+    private void getPrefs() {
+        mPreferences = this.getSharedPreferences(PREFENCES_KEY, Context.MODE_PRIVATE);
     }
 
     private void logoutUser() {
@@ -138,7 +174,10 @@ public class MainActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        clearUserFromIntent();
                         clearUserFromPref();
+                        mUserId = -1;
+                        checkForUser();
                     }
                 });
         alertBuilder.setNegativeButton(getString(R.string.no),
@@ -148,6 +187,14 @@ public class MainActivity extends AppCompatActivity {
                         //we don't really need to do anything here.
                     }
                 });
+    }
+
+    private void clearUserFromIntent() {
+        getIntent().putExtra(USER_ID_KEY, -1);
+    }
+
+    private void clearUserFromPref() {
+        addUserToPreference(-1);
     }
 
     private GymLog getValuesFromDisplay() {
@@ -169,13 +216,11 @@ public class MainActivity extends AppCompatActivity {
             Log.d("GYMLOG", "Couldn't convert reps");
         }
 
-        GymLog log = new GymLog(exercise, reps, weight, mUserId);
-
-        return log;
+        return new GymLog(exercise, reps, weight, mUserId);
     }
 
     private void refreshDisplay() {
-        mGymLogs = mGymLogDAO.getGymLogsById(mUserId);
+        mGymLogs = mGymLogDAO.getGymLogsByUserId(mUserId);
 
         if(mGymLogs.size() >= 0) {
             mMainDisplay.setText(R.string.noLogsMessage);

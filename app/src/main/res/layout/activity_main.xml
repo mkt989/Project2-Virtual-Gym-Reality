@@ -70,6 +70,7 @@
         android:layout_marginEnd="16dp"
         android:text="@string/mainSubmitButton"
         android:textSize="24sp"
+        android:backgroundTint="#FF5EAB"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainGymLogDisplay" />
 
