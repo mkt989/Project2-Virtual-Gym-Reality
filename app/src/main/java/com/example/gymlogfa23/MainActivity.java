@@ -151,10 +151,10 @@ public class MainActivity extends AppCompatActivity {
         //do we have any users at all?
         List<User> users = mGymLogDAO.getAllUsers();
         if(users.size() <= 0) {
-            User defaultUser = new User("Debby", "123");
-            User altUser = new User("Shaw", "123");
-            User testUser1 = new User("testuser1", "123");
-            User admin2 = new User("admin2", "123");
+            User defaultUser = new User("Debby", "123", false);
+            User altUser = new User("Shaw", "123", false);
+            User testUser1 = new User("testuser1", "123", false);
+            User admin2 = new User("admin2", "123", true);
             mGymLogDAO.insert(defaultUser, altUser, testUser1, admin2);
         }
 
