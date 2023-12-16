@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {  //menu logout button
         int id = item.getItemId();
-        if(id == R.id.logout) {
-            Toast.makeText(this, "You have pressed logout", Toast.LENGTH_SHORT).show();
+        if(id == R.id.userMenuLogout) {
+            logoutUser();
             return true;
         }
 
@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if(mUser != null) {
-            //MenuItem item = menu.findItem(R.id.userMenuLogout);
-            //item.setTitle(mUser.getUserName());
+            MenuItem item = menu.findItem(R.id.userMenuLogout);
+            item.setTitle(mUser.getUserName());
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -151,9 +151,11 @@ public class MainActivity extends AppCompatActivity {
         //do we have any users at all?
         List<User> users = mGymLogDAO.getAllUsers();
         if(users.size() <= 0) {
-            User defaultUser = new User("Deb", "123");
+            User defaultUser = new User("Debby", "123");
             User altUser = new User("Shaw", "123");
-            mGymLogDAO.insert(defaultUser, altUser);
+            User testUser1 = new User("testuser1", "123");
+            User admin2 = new User("admin2", "123");
+            mGymLogDAO.insert(defaultUser, altUser, testUser1, admin2);
         }
 
         Intent intent = LoginActivity.intentFactory(this);
@@ -177,6 +179,9 @@ public class MainActivity extends AppCompatActivity {
                         clearUserFromPref();
                         mUserId = -1;
                         checkForUser();
+                        Intent intent = LoginActivity.intentFactory(MainActivity.this);
+                        startActivity(intent);
+                        finish();
                     }
                 });
         alertBuilder.setNegativeButton(getString(R.string.no),

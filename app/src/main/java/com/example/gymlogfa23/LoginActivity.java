@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gymlogfa23.db.AppDatabase;
@@ -34,6 +35,10 @@ public class LoginActivity extends AppCompatActivity {
 
         getDatabase();
 
+        TextView loginDescription = findViewById(R.id.mainGymLogDescription);
+
+        // Set the text for the TextView
+        loginDescription.setText("\"Virtual {Gym} Reality\" is designed for women that fuses virtual reality tech with fitness training, providing an immersive workout experience and a marketplace for diverse fitness products.");
     }
 
     private void wireupDisplay() {
