@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
-
+import androidx.appcompat.widget.Toolbar;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.Context;
@@ -20,7 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
 
 import com.example.gymlogfa23.db.AppDatabase;
 import com.example.gymlogfa23.db.GymLogDAO;
@@ -53,16 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {  //menu logout button
-        int id=item.getItemId();
-        if(id==R.id.logout) {
+        int id = item.getItemId();
+        if(id == R.id.logout) {
             Toast.makeText(this, "You have pressed logout", Toast.LENGTH_SHORT).show();
+            return true;
         }
-        if(id==R.id.aboutUS) {
-            Toast.makeText(this, "You have pressed About Us", Toast.LENGTH_SHORT).show();
-        }
-        if(id==R.id.share) {
-            Toast.makeText(this, "You have pressed share", Toast.LENGTH_SHORT).show();
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -70,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);   //logout button
+        setSupportActionBar(toolbar);   //logout button
 
         getDatabase();
 
