@@ -3,6 +3,8 @@ package com.example.gymlogfa23;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.appcompat.widget.Toolbar;
 import android.content.DialogInterface;
@@ -43,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
     private int mUserId = -1;
     private SharedPreferences mPreferences = null;
     private User mUser;
+
+    private RecyclerView mRecyclerView;
+    private GymLogAdapter mAdapter;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,6 +105,12 @@ public class MainActivity extends AppCompatActivity {
                 refreshDisplay();
             }
         });
+
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mAdapter = new GymLogAdapter(mGymLogs); // custom adapter passing GymLog list
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void loginUser(int userId) {
